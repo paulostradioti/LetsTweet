@@ -10,6 +10,7 @@ namespace LetsTweet.Models
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "O campo texto é obrigatório")]
         public string Text { get; set; }
     }
 }
