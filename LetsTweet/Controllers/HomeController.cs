@@ -33,27 +33,32 @@ namespace LetsTweet.Controllers
         [HttpPost]
         public IActionResult Index(IndexViewModel viewModel)
         {
+            //User meuusuario = Repository.GetUserById(viewModel.UserId);
+            
+
             if (!string.IsNullOrWhiteSpace(viewModel.Search))
             {
                 viewModel.Tweets = _context.Tweets.Where(x => x.Text.Contains(viewModel.Search));
-                return View(viewModel);
             }
             else
             {
-                return RedirectToAction("Index");
+                viewModel.Tweets = _context.Tweets;
             }
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult SaveTweet(Tweet tweet)
+        public IActionResult SaveTweet(IndexViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Tweets.Add(tweet);
+                _context.Tweets.Add(viewModel.Tweet);
                 _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
+            viewModel.Tweets = _context.Tweets;
+            return View("Index", viewModel);
         }
     }
 }
